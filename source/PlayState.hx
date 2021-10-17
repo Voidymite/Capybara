@@ -705,33 +705,10 @@ class PlayState extends MusicBeatState
 					camChangeZoom(1.3, (Conductor.stepCrochet * 4 / 1000), FlxEase.elasticInOut);
 				}
 
-			case "spooky":
-				dad.y += 200;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y - 100);
-			case "monster":
-				dad.y += 100;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y - 100);
-			case 'monster-christmas':
-				dad.y += 130;
-			case 'dad':
-				camPos.x += 400;
-			case 'pico':
+			case 'capybara':
 				camPos.x += 600;
 				dad.y += 300;
-			case 'parents-christmas':
-				dad.x -= 500;
-			case 'senpai':
-				dad.x += 150;
-				dad.y += 360;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-			case 'senpai-angry':
-				dad.x += 150;
-				dad.y += 360;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-			case 'spirit':
-				dad.x -= 150;
-				dad.y += 100;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
+
 		}
 
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
@@ -2936,7 +2913,7 @@ class PlayState extends MusicBeatState
 		if(bfBeats.contains(curBeat % 4) && boyfriend.canAutoAnim)
 			boyfriend.dance();
 
-		if (totalBeats % 8 == 7 && curSong == 'Bopeebo')
+		if (totalBeats % 8 == 7 && curSong == 'Afterparty')
 		{
 			boyfriend.playAnim('hey', true);
 
