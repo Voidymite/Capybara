@@ -23,17 +23,23 @@ LibVLC::LibVLC(void)
 		"--no-video-title-show",
 		"--text-renderer", "dummy",
 		"--quiet",
-		"--no-xlib",
-		
+		#if PLATFORM_LINUX
+"--no-xlib",
+#endif
+
+#if DEBUG
+"--verbose=2"
+#else
+#endif
 		//"--no-xlib", //no xlib if linux
 		//"--vout", "vmem"
-		// "--avcodec-hw=dxva2", // we dont need this since hardware acceleration is already added
-		"--verbose=2"
+		//"--avcodec-hw=dxva2",
+		//"--verbose=2"
 	};	
 	
 	int Argc = sizeof(Args) / sizeof(*Args);
-	libVlcInstance = libvlc_new(Argc, Args);
-	//libVlcInstance = libvlc_new(0, NULL);
+	// libVlcInstance = libvlc_new(Argc, Args);
+	libVlcInstance = libvlc_new(0, NULL);
 	
 }
 
@@ -46,7 +52,7 @@ LibVLC::~LibVLC(void)
     libvlc_event_detach( eventManager, libvlc_MediaPlayerStopped, 			callbacks, this );
     libvlc_event_detach( eventManager, libvlc_MediaPlayerEndReached, 		callbacks, this );
     libvlc_event_detach( eventManager, libvlc_MediaPlayerPositionChanged,	callbacks, this );
-    //stop();
+
     libvlc_media_player_release( libVlcMediaPlayer );	
 	libvlc_release( libVlcInstance );
 	
@@ -130,15 +136,16 @@ uint8_t* LibVLC::getPixelData()
 
 void LibVLC::setPath(const char* path)
 {
-	std::cout << "set location: " << path << std::endl;
-	
+	std::cout << "settin' path: " << path << std::endl;
+
+	//libVlcMediaItem = libvlc_media_new_path(libVlcInstance, path);
 	libVlcMediaItem = libvlc_media_new_location(libVlcInstance, path);
+	//libVlcMediaItem = libvlc_media_new_location(libVlcInstance, "file:///C:\\Program Files (x86)\\Xms Client 3\\resources\\downloaded\\files\\ac079337-dbd1-11e6-a59e-f681aa9a2e27.mp4");
 	libVlcMediaPlayer = libvlc_media_player_new_from_media(libVlcMediaItem);
 	libvlc_media_parse(libVlcMediaItem);
 	libvlc_media_release(libVlcMediaItem);
-	
-	useHWacceleration(true); // OMG HARDWARE ACCELERATION
-	
+	useHWacceleration(true);
+
 	if (libVlcMediaItem!=nullptr)
 	{
 		std::string sa = "input-repeat=";
@@ -196,7 +203,7 @@ void LibVLC::playInWindow(const char* path)
 
 void LibVLC::setInitProps()
 {
-	setVolume(vol);
+	setVolume(1);
 }
 
 void LibVLC::stop()
@@ -273,19 +280,20 @@ const char* LibVLC::getLastError()
 
 void LibVLC::setVolume(float volume)
 {
-	if (volume>255)
-		volume = 255.0;
+	if (volume > 100)
+		volume = 100.0;
 
-	vol = volume;
-	if (libVlcMediaPlayer!=NULL && libVlcMediaPlayer!=nullptr)
+	// vol = volume;
+
+	if (libVlcMediaPlayer != NULL && libVlcMediaPlayer != nullptr)
 	{
 		try
 		{
 			libvlc_audio_set_volume(libVlcMediaPlayer, volume);
-			//libvlc_audio_set_volume(libVlcMediaPlayer, 255.0);
 		}
 		catch(int e)
 		{
+			std::cout << "there was an error with volume: " << e << std::endl;
 		}
 	}
 }
@@ -338,8 +346,19 @@ void LibVLC::openMedia(const char* mediaPathName)
 {
 	libVlcMediaItem = libvlc_media_new_location(libVlcInstance, mediaPathName);
 	//libVlcMediaItem = libvlc_media_new_path(libVlcInstance, mediaPathName);
-    	libvlc_media_player_set_media(libVlcMediaPlayer, libVlcMediaItem);    
+    libvlc_media_player_set_media(libVlcMediaPlayer, libVlcMediaItem);    
 }
+
+//void MediaPlayer::setMedia( Media* media )
+//{
+    //libvlc_media_player_set_media( m_internalPtr, media->getInternalPtr() );
+//}
+
+//void
+//MediaPlayer::getSize( quint32 *outWidth, quint32 *outHeight )
+//{
+    //libvlc_video_get_size( m_internalPtr, 0, outWidth, outHeight );
+//}
 
 float LibVLC::getFPS()
 {
@@ -355,6 +374,26 @@ bool LibVLC::hasVout()
 {
     return libvlc_media_player_has_vout( libVlcMediaPlayer );
 }
+/*
+void LibVLC::setXwindow(uint32_t drawable)
+{
+	libvlc_media_player_set_xwindow(*this, drawable);
+}
+
+uint32_t LibVLC::xwindow()
+{
+	return libvlc_media_player_get_xwindow(*this);
+}
+
+void LibVLC::setHwnd(void * drawable)
+{
+	libvlc_media_player_set_hwnd(*this, drawable);
+}
+
+void* LibVLC::hwnd()
+{
+	return libvlc_media_player_get_hwnd(*this);
+}*/
 
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -419,19 +458,14 @@ void LibVLC::callbacks( const libvlc_event_t* event, void* ptr )
 			self->flags[7]=event->u.media_player_length_changed.new_length;
 			break;
 		case libvlc_MediaPlayerSnapshotTaken:
-		    	// imagine taking snapshots while playing a video on a rythm game lmfao
-			// self->emit snapshotTaken( event->u.media_player_snapshot_taken.psz_filename );
-			// flags[8]=event->u.media_player_length_changed.new_length;
 			break;
 		case libvlc_MediaPlayerEncounteredError:
-			self->flags[9]=1;	
+			self->flags[9]=1;
+			
 			break;
 		case libvlc_MediaPlayerSeekableChanged:
 			self->flags[10]=1;
 			break;
-		case libvlc_MediaPlayerPausableChanged:
-		case libvlc_MediaPlayerTitleChanged:
-		case libvlc_MediaPlayerNothingSpecial:
 		case libvlc_MediaPlayerOpening:
 			self->flags[11]=1;
 			break;
@@ -449,5 +483,3 @@ void LibVLC::callbacks( const libvlc_event_t* event, void* ptr )
     }
 	
 }
-
-/////////////////////////////////////////////////////////////////////////////////////

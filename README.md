@@ -1,54 +1,86 @@
-![](/art/readme/logo.png)
+# Friday Night Funkin' - Psych Engine
+Engine originally used on [Mind Games Mod](https://gamebanana.com/mods/301107), intended to be a fix for the vanilla version's many issues while keeping the casual play aspect of it. Also aiming to be an easier alternative to newbie coders.
 
-*Finally, it's open source.*
+## Installation:
+Follow a Friday Night Funkin' source code compilation tutorial, after this you will need to install LuaJIT.
 
-# Friday Night Funkin' FPS Plus
-Friday Night Funkin' FPS Plus is a mod of Friday Night Funkin' that aims to improve gameplay and add quality of life features.
+You can do this with: `haxelib install linc_luajit` on a Command prompt/PowerShell
 
-*You can find the original game here:* **[Newgrounds](https://www.newgrounds.com/portal/view/770371) - [itch.io](https://ninja-muffin24.itch.io/funkin) - [GitHub](https://github.com/ninjamuffin99/Funkin)**
+...Or if you don't want your mod to be able to run .lua scripts, delete the "LUA_ALLOWED" line on Project.xml
 
-## Features
+## Credits:
+* Shadow Mario - Coding
+* RiverOaken - Arts and Animations
 
-### Increased FPS
-The orignal purpose of FPS Plus. The game has an increased framerate over the base game and even an option for a completely uncapped framerate.
+### Special Thanks
+* Keoiki - Note Splash Animations
 
-### Better Input
-Adjusts how the game handles input allowing you to hit notes more consistently.
+WARNING: This engine is still very early in development! You can request new features though
+_____________________________________
 
-This also changes held notes so that they disappear if released to early.
+# Features
 
-### Fully Rebindable Keys
-So that you can use whatever wacky control scheme you come up with. Or you could just be boring and use DFJK. That works too...
+## Attractive animated dialogue boxes:
 
-### Improved Chart Editor
-FPS Plus contains a modified chart editor that has more utility features and is way more user friendly.
+![](https://user-images.githubusercontent.com/44785097/127706669-71cd5cdb-5c2a-4ecc-871b-98a276ae8070.gif)
 
-### Improved Animation Debug
-The animation debug has been adjusted to make editing offsets way easier and faster while requiring less guess work.
 
-### Downscroll
-Notes appear from the top of the screen instead of the bottom. This make help some people read patterns more easily.
+## Atleast one change to every week:
+### Week 1:
+  * New Dad Left sing sprite 
+  * Unused stage lights are now used
+### Week 2:
+  * Both BF and Skid & Pump does "Hey!" animations
+  * Thunders does a quick light flash and zooms the camera in slightly
+  * Added a quick transition/cutscene to Monster
+### Week 3:
+  * BF does "Hey!" during Philly Nice
+  * Blammed has a cool new colors flash during that sick part of the song
+### Week 4:
+  * Better hair physics for Mom/Boyfriend (Maybe even slightly better than Week 7's :eyes:)
+  * Henchmen die during all songs. Yeah :(
+### Week 5:
+  * Bottom Boppers and GF does "Hey!" animations during Cocoa and Eggnog
+  * On Winter Horrorland, GF bops her head slower in some parts of the song.
+### Week 6:
+  * On Thorns, the HUD is hidden during the cutscene
+  * Also there's the Background girls being spooky during the "Hey!" parts of the Instrumental
 
-### Improved Health Icons
-Adjusted some of the health icons and adds winning icons.
+## Cool new Chart Editor changes and countless bug fixes
+![](https://i.imgur.com/h6Ja7eT.png)
+* You can now chart "Event" notes, which are bookmarks that trigger specific actions that usually were hardcoded on the vanilla version of the game.
+* Your song's BPM can now have decimal values
+* You can manually adjust a Note's strum time if you're really going for milisecond precision
+* You can change a note's type on the Editor, it comes with two example types:
+  * Alt Animation: Forces an alt animation to play, useful for songs like Ugh/Stress
+  * Hey: Forces a "Hey" animation instead of the base Sing animation, if Boyfriend hits this note, Girlfriend will do a "Hey!" too.
 
-## Building
-- For build intructions, follow the guide on the Funkin github page [here](https://github.com/ninjamuffin99/Funkin#build-instructions).
+## Improved Animation Debug menu (Press 8 in-game on a Debug build)
+![](https://user-images.githubusercontent.com/44785097/127721062-f912853c-2513-41b8-bd66-fd80d9d4ee0f.png)
+* You can now press Save Offsets to save a .txt file with the editted offsets
+* You can also now change the characters while on the Menu
+* Go back to the game by pressing Escape
+NOTE: This should be used for fixing your character floating or being slightly under the ground! It's not for texture editting.
 
-    - You do not need to install polymod since FPS Plus doesn't use it.
-    
-    - You can ignore is the part about ignored files since FPS Plus removes them.
+## Story mode menu rework:
+![](https://i.imgur.com/UB2EKpV.png)
+* Added a different BG to every song (less Tutorial)
+* All menu characters are now in individual spritesheets, makes modding it easier.
 
-## Credits
-### Friday Night Funkin'
-- [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programmer
-- [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Art
-- [Kawaisprite](https://twitter.com/kawaisprite) - Musician
+## Credits menu
+![](https://i.imgur.com/NdIQt3d.png)
+* You can add a head icon, name, description and a Redirect link for when the player presses Enter while the item is currently selected.
 
-### FPS Plus
-- [Rozebud](https://twitter.com/helpme_thebigt) - *Everything*
+## Awards/Achievements
+* The engine comes with 16 example achievements that you can mess with and learn how it works (Check Achievements.hx and search for "checkForAchievement" on PlayState.hx)
 
-### Shoutouts
-- [KadeDev](https://twitter.com/KadeDeveloper) - *Rival*
-- [PolybiusProxy](https://twitter.com/polybiusproxy) - Haxeflixel Desktop MP4 stuff.
-- [Ethab Taxi](https://twitter.com/EthabTaxi) - He's just sorta chillin'.
+## Options menu:
+* You can change Note colors, Controls and Preferences there.
+ * On Preferences you can toggle Downscroll, Anti-Aliasing, Framerate, Low Quality, Note Splashes, Hide Hud elements, Flashing Lights, etc.
+
+## Other gameplay features:
+* When the enemy hits a note, it plays the note hit animation on their strum, just like when the player hits a note.
+* Lag doesn't impact the camera movement and player icon scaling anymore.
+* Some stuff based on Week 7's changes has been put in (Background colors on Freeplay, Note splashes)
+* You can reset your Score on Freeplay/Story Mode by pressing Reset button.
+* You can listen to a song on Freeplay by pressing Space once.
